@@ -60,10 +60,10 @@ Let's walk through a single learning step. Our Perceptron will try to classify a
 
 First, calculate the weighted sum of the inputs.
 
-`Sum = (w1 * x1) + (w2 * x2) + (w_bias * bias)`
-`Sum = (0.2 * 1) + (0.6 * 0) + (-0.5 * 1)`
-`Sum = 0.2 + 0 - 0.5`
-`Sum = -0.3`
+ - `Sum = (w1 * x1) + (w2 * x2) + (w_bias * bias)`
+ - `Sum = (0.2 * 1) + (0.6 * 0) + (-0.5 * 1)`
+ - `Sum = 0.2 + 0 - 0.5`
+ - `Sum = -0.3`
 
 Now, apply the step function. Since `Sum` (-0.3) is not greater than 0, the prediction is 0.
 
@@ -73,9 +73,9 @@ Now, apply the step function. Since `Sum` (-0.3) is not greater than 0, the pred
 
 Compare the correct output (`y`) with the predicted output (`ŷ`).
 
-`Error = y - ŷ`
-`Error = 1 - 0`
-`Error = 1`
+ - `Error = y - ŷ`
+ - `Error = 1 - 0`
+ - `Error = 1`
 
 An error of `+1` means the neuron should have fired but didn't. We must update the weights to correct for this.
 
