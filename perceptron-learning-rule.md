@@ -35,6 +35,30 @@ Let's break down each component:
     2.  **Error = 1**: The neuron should have fired but didn't (predicted 0, target was 1). The update will be positive, strengthening the connections that should have led to a positive result.
     3.  **Error = -1**: The neuron fired when it shouldn't have (predicted 1, target was 0). The update will be negative, weakening the connections that led to the incorrect firing.
 
+
+```mermaid
+stateDiagram-v2
+    [*] --> Initialized: Create Perceptron
+    Initialized --> Training: trainer.start()
+
+    state Training {
+        [*] --> Evaluating: Get next row from dataset
+        Evaluating --> MakingPrediction: inputs from row received
+        MakingPrediction --> <<choice>> C1: Prediction made for current row
+
+        C1 --> UpdatingWeights: [Prediction is Incorrect]
+        C1 --> ReadyForNextInput: [Prediction is Correct]
+
+        UpdatingWeights --> ReadyForNextInput: weights adjusted based on row
+        
+        ReadyForNextInput --> Evaluating: [More rows in epoch]
+        ReadyForNextInput --> [*]: [End of epoch]
+    }
+
+    Training --> Trained: stop_condition_met()
+    Trained --> [*]
+```
+
 ---
 
 ### Example: A Simple Perceptron for Spam Detection
