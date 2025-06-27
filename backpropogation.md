@@ -1,4 +1,4 @@
-Of course. Here is the comprehensive introduction to backpropagation, with the images replaced by Mermaid diagrams for a more integrated and code-friendly presentation.
+Of course. Here is the introduction to backpropagation formatted in Markdown, with Mermaid diagrams and LaTeX equations included.
 A Gentle and Visual Introduction to Backpropagation: How Machines Learn from Mistakes
 Imagine teaching a toddler to identify a cat. You show them a picture and say, "cat." They might then point at a dog and say, "cat." You'd gently correct them, "No, that's a dog." Over time, with enough examples and corrections, they learn the difference.
 In the world of artificial intelligence, a similar learning process happens inside a neural network, and the method of correction is a clever algorithm called backpropagation. This is a gentle, visual introduction to how it works.
@@ -133,7 +133,7 @@ This entire processâ€”forward pass, calculating the error, and backpropagationâ€
 A Deeper Dive: The Mathematics of Backpropagation
 The intuitive explanation above describes a process that is deeply rooted in calculus and optimization. Let's introduce the core mathematical concepts that make backpropagation work.
 1. The Loss Function
-First, we need to formally measure the network's error. We do this with a loss function. A common one is the Mean Squared Error (MSE). If y is the actual value (e.g., 1 for "cat") and \\hat{y} (pronounced "y-hat") is the network's prediction (e.g., 0.3), the squared error for that single prediction is (\\hat{y} - y)^2.
+First, we need to formally measure the network's error. We do this with a loss function. A common one is the Mean Squared Error (MSE). If y is the actual value (e.g., 1 for "cat") and \\hat{y} is the network's prediction (e.g., 0.3), the squared error for that single prediction is (\\hat{y} - y)^2.
 2. The Gradient (\\nabla L)
 The gradient of the loss function, denoted as \\nabla L, is a vector that contains all the partial derivatives of the loss with respect to each weight and bias in the network.
 \nabla L = \left[ \frac{\partial L}{\partial w_1}, \frac{\partial L}{\partial w_2}, \dots, \frac{\partial L}{\partial b_1}, \frac{\partial L}{\partial b_2}, \dots \right]
