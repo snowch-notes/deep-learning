@@ -130,7 +130,7 @@ To make these adjustments correctly, backpropagation calculates the gradient. Th
 xychart-beta
   title "Gradient Descent"
   x-axis "Weight Value"
-  y-axis "Error / Loss"
+  y-axis "Error Loss"
   line([
     { x: 0, y: 10 },
     { x: 1, y: 7 },
