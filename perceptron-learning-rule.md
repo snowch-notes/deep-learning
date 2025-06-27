@@ -22,23 +22,39 @@ The key principle is **error-driven learning**: the connection weights are only 
 
 Here is an example Perceptron:
 
+Here is an example Perceptron layer:
+
 ```mermaid
 graph LR
-    subgraph "Inputs"
+    subgraph "Inputs (X)"
+        direction TB
         X1["x₁ (Humidity)"]
         X2["x₂ (Temperature)"]
     end
     
-    subgraph "Perceptron"
-        SUM["Σ (weighted sum)"]
-        STEP["Step Function φ"]
-        OUTPUT["ŷ (0 or 1)"]
+    subgraph "Perceptron Layer"
+        direction TB
+        N1((Neuron 1))
+        N2((Neuron 2))
     end
     
-    X1 -- "w₁" --> SUM
-    X2 -- "w₂" --> SUM  
-    SUM --> STEP
-    STEP --> OUTPUT
+    subgraph "Outputs"
+        direction TB
+        Y1["ŷ₁"]
+        Y2["ŷ₂"]
+    end
+    
+    %% Connections to Neuron 1
+    X1 -- "w₁,₁" --> N1
+    X2 -- "w₂,₁" --> N1
+    
+    %% Connections to Neuron 2
+    X1 -- "w₁,₂" --> N2
+    X2 -- "w₂,₂" --> N2
+    
+    %% Outputs
+    N1 --> Y1
+    N2 --> Y2
 ```
 
 The mechanism for updating the weights is captured in this simple and elegant equation:
