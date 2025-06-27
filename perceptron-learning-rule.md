@@ -14,6 +14,29 @@ The key principle is **error-driven learning**: the connection weights are only 
 
 #### The Learning Rule Equation
 
+Here is an example Perceptron:
+
+```mermaid
+graph LR
+    subgraph "Inputs"
+        X1["x₁ (Feature 1)"]
+        X2["x₂ (Feature 2)"]
+        BIAS["bias (always 1)"]
+    end
+    
+    subgraph "Perceptron"
+        SUM["Σ (weighted sum)"]
+        STEP["Step Function φ"]
+        OUTPUT["ŷ (0 or 1)"]
+    end
+    
+    X1 -- "w₁" --> SUM
+    X2 -- "w₂" --> SUM  
+    BIAS -- "w_bias" --> SUM
+    SUM --> STEP
+    STEP --> OUTPUT
+```
+
 The mechanism for updating the weights is captured in this simple and elegant equation:
 
 $w^{\text{new}} = w^{\text{old}} + \eta \cdot (\text{target output} - \text{predicted output}) \cdot \text{input}$
@@ -61,15 +84,15 @@ stateDiagram-v2
 
 ---
 
-### Example: A Simple Perceptron for Spam Detection
+### Example: A Simple Perceptron for Binary Classification
 
-Let's walk through a single learning step. Our Perceptron will try to classify an email as either "Spam" (output = 1) or "Not Spam" (output = 0).
+Let's walk through a single learning step. Our Perceptron will try to classify an input as belonging to either the positive class (output = 1) or negative class (output = 0).
 
 #### Step 1: Initial State
 
-* **Inputs for one training email ($\mathbf{x}$):**
-    * $x_1 = 1$ (The email contains the word "free")
-    * $x_2 = 0$ (The email is from an unknown contact)
+* **Inputs for one training instance ($\mathbf{x}$):**
+    * $x_1 = 1$ (Feature 1 is present/active)
+    * $x_2 = 0$ (Feature 2 is absent/inactive)
     * $x_{\text{bias}} = 1$ (This input is always 1)
 * **Initial Weights ($\mathbf{w}$):**
     * $w_1$ (for $x_1$) = 0.2
@@ -77,8 +100,8 @@ Let's walk through a single learning step. Our Perceptron will try to classify a
     * $w_{\text{bias}} = -0.5$
 * **Learning Rate ($\eta$):**
     * $\eta = 0.1$
-* **Correct Output for this email ($y$):**
-    * $y = 1$ (This email is actually spam)
+* **Correct Output for this instance ($y$):**
+    * $y = 1$ (This instance belongs to the positive class)
 
 #### Step 2: Make a Prediction ($\hat{y}$)
 
@@ -92,7 +115,7 @@ $\text{Sum} = 0.2 + 0 - 0.5 = -0.3$
 
 Now, apply the step function. Since $\text{Sum}$ (-0.3) is not greater than 0, the prediction is 0.
 
-* **Predicted Output ($\hat{y}$) = 0** (The model thinks it's "Not Spam")
+* **Predicted Output ($\hat{y}$) = 0** (The model predicts negative class)
 
 #### Step 3: Calculate the Error
 
@@ -112,7 +135,7 @@ $w_1^{\text{new}} = w_1 + (\eta \cdot \text{Error} \cdot x_1)$
 
 $w_1^{\text{new}} = 0.2 + (0.1 \cdot 1 \cdot 1) = 0.2 + 0.1 = 0.3$
 
-*Reasoning:* Since $x_1$ was active (1) and the error was positive, we increase $w_1$. This strengthens the connection, making the word "free" a stronger indicator of spam.
+*Reasoning:* Since $x_1$ was active (1) and the error was positive, we increase $w_1$. This strengthens the connection, making Feature 1 a stronger indicator of the positive class.
 
 **2. Update $w_2$:**
 
