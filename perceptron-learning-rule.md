@@ -20,8 +20,6 @@ The key principle is **error-driven learning**: the connection weights are only 
 
 #### The Learning Rule Equation
 
-Here is an example Perceptron:
-
 Here is an example Perceptron layer:
 
 ```mermaid
