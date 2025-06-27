@@ -6,7 +6,13 @@ The main idea is to iteratively adjust the network's connection weights based on
 
 #### The Goal: Minimizing Error
 
-Imagine a Perceptron with multiple inputs and a single output neuron. Its task is to classify an input pattern as belonging to one of two classes (e.g., "Spam" or "Not Spam"). The Perceptron makes a prediction by calculating a weighted sum of its inputs and then applying an activation function. A common choice for this is the **step function**, which typically outputs 1 if the calculated sum is positive and 0 otherwise.
+Imagine a Perceptron with multiple inputs and a single output neuron. Its task is to classify an input pattern as belonging to one of two classes. For example, a simple weather prediction system:
+
+- $x_1 = 1$ if humidity > 80%, otherwise 0
+- $x_2 = 1$ if temperature > 25°C, otherwise 0  
+- Predict: rain (1) or no rain (0)
+
+The Perceptron makes a prediction by calculating a weighted sum of its inputs and then applying an activation function. A common choice for this is the **step function**, which typically outputs 1 if the calculated sum is positive and 0 otherwise.
 
 The Perceptron learns by being shown examples from a training set, one at a time. For each example, it makes a prediction which is then compared to the actual, correct label (the target output). If the prediction is wrong, the learning rule is applied to adjust the weights.
 
@@ -19,9 +25,8 @@ Here is an example Perceptron:
 ```mermaid
 graph LR
     subgraph "Inputs"
-        X1["x₁ (Feature 1)"]
-        X2["x₂ (Feature 2)"]
-        BIAS["bias (always 1)"]
+        X1["x₁ (Humidity)"]
+        X2["x₂ (Temperature)"]
     end
     
     subgraph "Perceptron"
@@ -32,7 +37,6 @@ graph LR
     
     X1 -- "w₁" --> SUM
     X2 -- "w₂" --> SUM  
-    BIAS -- "w_bias" --> SUM
     SUM --> STEP
     STEP --> OUTPUT
 ```
