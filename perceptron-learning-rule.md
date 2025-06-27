@@ -167,6 +167,101 @@ $\text{Sum} = (0.3 \cdot 1) + (0.6 \cdot 0) + (-0.4 \cdot 1) = 0.3 + 0 - 0.4 = -
 
 The output is still 0, but the sum moved from -0.3 to -0.1, showing that this step has pushed the model closer to the correct prediction.
 
+---
+
+### Code: A Simple Perceptron for Binary Classification
+
+```python
+class Perceptron:
+    def __init__(self, learning_rate=0.1):
+        self.learning_rate = learning_rate
+        self.weights = None
+        
+    def step_function(self, weighted_sum):
+        return 1 if weighted_sum > 0 else 0
+    
+    def predict(self, inputs):
+        inputs_with_bias = inputs + [1]
+        weighted_sum = sum(w * x for w, x in zip(self.weights, inputs_with_bias))
+        prediction = self.step_function(weighted_sum)
+        return prediction, weighted_sum
+    
+    def update_weights(self, inputs, target, prediction):
+        inputs_with_bias = inputs + [1]
+        error = target - prediction
+        
+        for i in range(len(self.weights)):
+            old_weight = self.weights[i]
+            self.weights[i] = old_weight + self.learning_rate * error * inputs_with_bias[i]
+            
+            input_name = f"x_{i+1}" if i < len(inputs) else "bias"
+            print(f"  {input_name}: {old_weight:.1f} + ({self.learning_rate} × {error} × {inputs_with_bias[i]}) = {self.weights[i]:.1f}")
+
+def main():
+    print("=== Perceptron Learning Rule Example ===\n")
+    
+    # Initialize and set weights from document example
+    perceptron = Perceptron(learning_rate=0.1)
+    perceptron.weights = [0.2, 0.6, -0.5]  # [w1, w2, w_bias]
+    
+    print("Initial weights: w1=0.2, w2=0.6, w_bias=-0.5")
+    print("Learning rate (η): 0.1\n")
+    
+    # Training instance: x1=1, x2=0, target=1
+    inputs = [1, 0]
+    target = 1
+    
+    print("Training instance: x1=1, x2=0, bias=1, target=1\n")
+    
+    # Make prediction
+    prediction, weighted_sum = perceptron.predict(inputs)
+    print(f"Weighted sum: (0.2×1) + (0.6×0) + (-0.5×1) = {weighted_sum}")
+    print(f"Prediction: {prediction} (step function)\n")
+    
+    # Calculate and show error
+    error = target - prediction
+    print(f"Error: {target} - {prediction} = {error}\n")
+    
+    # Update weights
+    print("Weight updates (w_new = w_old + η × error × input):")
+    perceptron.update_weights(inputs, target, prediction)
+    
+    # Show final result
+    print(f"\nFinal weights: w1={perceptron.weights[0]:.1f}, w2={perceptron.weights[1]:.1f}, w_bias={perceptron.weights[2]:.1f}")
+    
+    # Verify improvement
+    _, new_sum = perceptron.predict(inputs)
+    print(f"New weighted sum: {new_sum:.1f} (improved from -0.3 to -0.1)")
+
+if __name__ == "__main__":
+    main()
+```
+which outputs:
+
+```console
+=== Perceptron Learning Rule Example ===
+
+Initial weights: w1=0.2, w2=0.6, w_bias=-0.5
+Learning rate (η): 0.1
+
+Training instance: x1=1, x2=0, bias=1, target=1
+
+Weighted sum: (0.2×1) + (0.6×0) + (-0.5×1) = -0.3
+Prediction: 0 (step function)
+
+Error: 1 - 0 = 1
+
+Weight updates (w_new = w_old + η × error × input):
+  x_1: 0.2 + (0.1 × 1 × 1) = 0.3
+  x_2: 0.6 + (0.1 × 1 × 0) = 0.6
+  bias: -0.5 + (0.1 × 1 × 1) = -0.4
+
+Final weights: w1=0.3, w2=0.6, w_bias=-0.4
+New weighted sum: -0.1 (improved from -0.3 to -0.1)
+```
+
+---
+
 ### What's Next? The Big Picture
 
 This process of predicting, calculating error, and updating weights is performed for a single training instance. In a real-world scenario, a Perceptron algorithm would:
