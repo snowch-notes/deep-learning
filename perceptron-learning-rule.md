@@ -43,12 +43,12 @@ graph LR
     end
     
     %% Connections to Neuron 1
-    X1 -- "w₁,₁" --> N1
-    X2 -- "w₂,₁" --> N1
+    X1 -- "w₁₁" --> N1
+    X2 -- "w₂₁" --> N1
     
     %% Connections to Neuron 2
-    X1 -- "w₁,₂" --> N2
-    X2 -- "w₂,₂" --> N2
+    X1 -- "w₁₂" --> N2
+    X2 -- "w₂₂" --> N2
     
     %% Outputs
     N1 --> Y1
