@@ -10,7 +10,7 @@ This detailed guide is structured as a series of five practical experiments. Eac
 
 **Learning Goal:** See the simplest possible "thinking" a neural network can do and understand its fundamental limitations.
 
-### Understanding the Coordinate System First
+### Understanding the Coordinate System and Features
 
 Before diving into the experiment, let's clarify what we're looking at:
 
@@ -18,6 +18,11 @@ Before diving into the experiment, let's clarify what we're looking at:
 - **X₂ (vertical axis)**: This represents the y-coordinate of each data point - how far up or down a point is positioned
 
 Think of X₁ and X₂ as the basic "features" our model can observe about each data point - simply where it sits in 2D space.
+
+**Important insight about individual features:**
+- When you select **only X₁**, the network creates a **vertical** decision line (because it can only use horizontal position to make decisions)
+- When you select **only X₂**, the network creates a **horizontal** decision line (because it can only use vertical position to make decisions)
+- When you select **both X₁ and X₂**, the network can create a **diagonal** decision line that better follows the natural separation between clusters
 
 ### The Setup
 
@@ -89,7 +94,21 @@ For simple, linearly separable data, you don't need complex neural networks. A s
 
 ---
 
-### Quick Self-Check
+### Quick Self-Check and Feature Exploration
+
+**Experiment with Individual Features:**
+1. Try selecting **only X₁** - notice how the decision boundary becomes a vertical line
+2. Try selecting **only X₂** - notice how the decision boundary becomes a horizontal line
+3. Select **both X₁ and X₂** together - see how the diagonal boundary is much more effective
+
+**Why does this happen?**
+- **X₁ only**: The network can only use horizontal position, so it draws a vertical line at some X₁ threshold: "If horizontal position > threshold, then Blue"
+- **X₂ only**: The network can only use vertical position, so it draws a horizontal line at some X₂ threshold: "If vertical position > threshold, then Orange"  
+- **Both features**: The network combines both coordinates to create the optimal diagonal decision boundary
+
+This demonstrates why **feature selection matters** - more relevant features generally lead to better decision boundaries!
+
+**Other checks:**
 - Can you see the straight decision boundary in the output?
 - Do the loss curves show the network learned quickly?
 - Try adjusting the "Noise" slider - can you make the problem harder by increasing overlap between clusters?
