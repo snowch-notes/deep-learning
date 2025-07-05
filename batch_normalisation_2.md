@@ -33,7 +33,7 @@ Now, let's introduce Batch Normalization into the same network. Batch Normalizat
 graph TD
     A[Input Layer] --> B{Layer 1};
     B -- Weighted Sum --> C(Batch Norm);
-    C -- Normalized & Scaled --> D[Activation (ReLU)];
+    C -- Normalized and Scaled --> D[Activation - ReLU];
     D --> E{Layer 2};
 ```
 
