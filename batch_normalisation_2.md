@@ -43,22 +43,25 @@ Let's examine a concrete example with a 2-layer network, tracking how weight cha
 
 **Table 1: Network Without Batch Normalization**
 
-| **Training Step** | **Sample Input** | **Layer 1 Weight** | **Layer 1 Output** | **Layer 2 Weight** | **Layer 2 Pre-activation** | **Layer 2 Output (ReLU)** | **Input Distribution Stats** |
-|---|---|---|---|---|---|---|---|
-| **Step 1 - Sample 1** | 2.0 | 0.5 | 1.0 | 0.8 | 0.8 | 0.8 | Mean: 1.25 |
-| **Step 1 - Sample 2** | 3.0 | 0.5 | 1.5 | 0.8 | 1.2 | 1.2 | Std: 0.35 |
-| **Step 1 - Sample 3** | 1.5 | 0.5 | 0.75 | 0.8 | 0.6 | 0.6 | Range: 0.75-1.5 |
-| **Step 1 - Sample 4** | 2.5 | 0.5 | 1.25 | 0.8 | 1.0 | 1.0 | |
-| ***After Weight Update*** | --- | **New W₁: 0.3** | --- | **New W₂: 0.9** | --- | --- | --- |
-| **Step 2 - Sample 1** | 2.2 | 0.3 | 0.66 | 0.9 | 0.59 | 0.59 | Mean: 0.73 |
-| **Step 2 - Sample 2** | 3.1 | 0.3 | 0.93 | 0.9 | 0.84 | 0.84 | Std: 0.22 |
-| **Step 2 - Sample 3** | 1.8 | 0.3 | 0.54 | 0.9 | 0.49 | 0.49 | Range: 0.54-0.93 |
-| **Step 2 - Sample 4** | 2.7 | 0.3 | 0.81 | 0.9 | 0.73 | 0.73 | |
-| ***After Weight Update*** | --- | **New W₁: 0.2** | --- | **New W₂: 1.1** | --- | --- | --- |
-| **Step 3 - Sample 1** | 2.4 | 0.2 | 0.48 | 1.1 | 0.53 | 0.53 | Mean: 0.55 |
-| **Step 3 - Sample 2** | 3.2 | 0.2 | 0.64 | 1.1 | 0.70 | 0.70 | Std: 0.12 |
-| **Step 3 - Sample 3** | 2.0 | 0.2 | 0.40 | 1.1 | 0.44 | 0.44 | Range: 0.40-0.64 |
-| **Step 3 - Sample 4** | 2.8 | 0.2 | 0.56 | 1.1 | 0.62 | 0.62 | |
+| **Training Step** | **Sample Input** | **Layer 1 Weight** | **Layer 1 Output** | **Layer 2 Weight** | **Layer 2 Pre-activation** | **Layer 2 Output (ReLU)** |
+|---|---|---|---|---|---|---|
+| **Step 1 - Sample 1** | 2.0 | 0.5 | 1.0 | 0.8 | 0.8 | 0.8 |
+| **Step 1 - Sample 2** | 3.0 | 0.5 | 1.5 | 0.8 | 1.2 | 1.2 |
+| **Step 1 - Sample 3** | 1.5 | 0.5 | 0.75 | 0.8 | 0.6 | 0.6 |
+| **Step 1 - Sample 4** | 2.5 | 0.5 | 1.25 | 0.8 | 1.0 | 1.0 |
+| **Step 1 Batch Stats** | --- | --- | **Layer 1 outputs: [1.0, 1.5, 0.75, 1.25]** | --- | --- | **Mean: 1.125, Std: 0.31, Range: 0.75-1.5** |
+| ***After Weight Update*** | --- | **New W₁: 0.3** | --- | **New W₂: 0.9** | --- | --- |
+| **Step 2 - Sample 1** | 2.2 | 0.3 | 0.66 | 0.9 | 0.59 | 0.59 |
+| **Step 2 - Sample 2** | 3.1 | 0.3 | 0.93 | 0.9 | 0.84 | 0.84 |
+| **Step 2 - Sample 3** | 1.8 | 0.3 | 0.54 | 0.9 | 0.49 | 0.49 |
+| **Step 2 - Sample 4** | 2.7 | 0.3 | 0.81 | 0.9 | 0.73 | 0.73 |
+| **Step 2 Batch Stats** | --- | --- | **Layer 1 outputs: [0.66, 0.93, 0.54, 0.81]** | --- | --- | **Mean: 0.735, Std: 0.16, Range: 0.54-0.93** |
+| ***After Weight Update*** | --- | **New W₁: 0.2** | --- | **New W₂: 1.1** | --- | --- |
+| **Step 3 - Sample 1** | 2.4 | 0.2 | 0.48 | 1.1 | 0.53 | 0.53 |
+| **Step 3 - Sample 2** | 3.2 | 0.2 | 0.64 | 1.1 | 0.70 | 0.70 |
+| **Step 3 - Sample 3** | 2.0 | 0.2 | 0.40 | 1.1 | 0.44 | 0.44 |
+| **Step 3 - Sample 4** | 2.8 | 0.2 | 0.56 | 1.1 | 0.62 | 0.62 |
+| **Step 3 Batch Stats** | --- | --- | **Layer 1 outputs: [0.48, 0.64, 0.40, 0.56]** | --- | --- | **Mean: 0.52, Std: 0.10, Range: 0.40-0.64** |
 
 **Key Observation**: Layer 2's input distribution is constantly shifting:
 - **Step 1**: Inputs range from 0.75 to 1.5 (mean: 1.25)
@@ -71,22 +74,34 @@ Layer 2 must continuously readjust to these changing input distributions, slowin
 
 **Table 2: Network With Batch Normalization**
 
-| **Training Step** | **Sample Input** | **Layer 1 Weight** | **Layer 1 Pre-activation** | **BN Mean (μ)** | **BN Std (σ)** | **BN Normalized** | **BN Output (γ=1, β=0)** | **Layer 2 Input** |
-|---|---|---|---|---|---|---|---|---|
-| **Step 1 - Sample 1** | 2.0 | 0.5 | 1.0 | 1.25 | 0.35 | -0.71 | -0.71 | 0.0 (ReLU) |
-| **Step 1 - Sample 2** | 3.0 | 0.5 | 1.5 | 1.25 | 0.35 | +0.71 | +0.71 | 0.71 |
-| **Step 1 - Sample 3** | 1.5 | 0.5 | 0.75 | 1.25 | 0.35 | -1.43 | -1.43 | 0.0 (ReLU) |
-| **Step 1 - Sample 4** | 2.5 | 0.5 | 1.25 | 1.25 | 0.35 | 0.00 | 0.00 | 0.0 (ReLU) |
-| ***After Weight Update*** | --- | **New W₁: 0.3** | --- | --- | --- | --- | --- | --- |
-| **Step 2 - Sample 1** | 2.2 | 0.3 | 0.66 | 0.73 | 0.11 | -0.64 | -0.64 | 0.0 (ReLU) |
-| **Step 2 - Sample 2** | 3.1 | 0.3 | 0.93 | 0.73 | 0.11 | +1.82 | +1.82 | 1.82 |
-| **Step 2 - Sample 3** | 1.8 | 0.3 | 0.54 | 0.73 | 0.11 | -1.73 | -1.73 | 0.0 (ReLU) |
-| **Step 2 - Sample 4** | 2.7 | 0.3 | 0.81 | 0.73 | 0.11 | +0.73 | +0.73 | 0.73 |
-| ***After Weight Update*** | --- | **New W₁: 0.2** | --- | --- | --- | --- | --- | --- |
-| **Step 3 - Sample 1** | 2.4 | 0.2 | 0.48 | 0.52 | 0.08 | -0.50 | -0.50 | 0.0 (ReLU) |
-| **Step 3 - Sample 2** | 3.2 | 0.2 | 0.64 | 0.52 | 0.08 | +1.50 | +1.50 | 1.50 |
-| **Step 3 - Sample 3** | 2.0 | 0.2 | 0.40 | 0.52 | 0.08 | -1.50 | -1.50 | 0.0 (ReLU) |
-| **Step 3 - Sample 4** | 2.8 | 0.2 | 0.56 | 0.52 | 0.08 | +0.50 | +0.50 | 0.50 |
+| **Training Step** | **Sample Input** | **Layer 1 Weight** | **Layer 1 Pre-activation** | **Layer 2 Input** |
+|---|---|---|---|---|
+| **Step 1 - Sample 1** | 2.0 | 0.5 | 1.0 | 0.0 (ReLU) |
+| **Step 1 - Sample 2** | 3.0 | 0.5 | 1.5 | 0.71 |
+| **Step 1 - Sample 3** | 1.5 | 0.5 | 0.75 | 0.0 (ReLU) |
+| **Step 1 - Sample 4** | 2.5 | 0.5 | 1.25 | 0.0 (ReLU) |
+| **Step 1 BN Calculation** | --- | --- | **Batch: [1.0, 1.5, 0.75, 1.25]** | --- |
+| | | | **μ = 1.125, σ = 0.31** | |
+| | | | **Normalized: [-0.40, +1.21, -1.21, +0.40]** | |
+| | | | **After ReLU: [0.0, 1.21, 0.0, 0.40]** | |
+| ***After Weight Update*** | --- | **New W₁: 0.3** | --- | --- |
+| **Step 2 - Sample 1** | 2.2 | 0.3 | 0.66 | 0.0 (ReLU) |
+| **Step 2 - Sample 2** | 3.1 | 0.3 | 0.93 | 1.22 |
+| **Step 2 - Sample 3** | 1.8 | 0.3 | 0.54 | 0.0 (ReLU) |
+| **Step 2 - Sample 4** | 2.7 | 0.3 | 0.81 | 0.29 |
+| **Step 2 BN Calculation** | --- | --- | **Batch: [0.66, 0.93, 0.54, 0.81]** | --- |
+| | | | **μ = 0.735, σ = 0.16** | |
+| | | | **Normalized: [-0.47, +1.22, -1.22, +0.47]** | |
+| | | | **After ReLU: [0.0, 1.22, 0.0, 0.47]** | |
+| ***After Weight Update*** | --- | **New W₁: 0.2** | --- | --- |
+| **Step 3 - Sample 1** | 2.4 | 0.2 | 0.48 | 0.0 (ReLU) |
+| **Step 3 - Sample 2** | 3.2 | 0.2 | 0.64 | 1.20 |
+| **Step 3 - Sample 3** | 2.0 | 0.2 | 0.40 | 0.0 (ReLU) |
+| **Step 3 - Sample 4** | 2.8 | 0.2 | 0.56 | 0.40 |
+| **Step 3 BN Calculation** | --- | --- | **Batch: [0.48, 0.64, 0.40, 0.56]** | --- |
+| | | | **μ = 0.52, σ = 0.10** | |
+| | | | **Normalized: [-0.40, +1.20, -1.20, +0.40]** | |
+| | | | **After ReLU: [0.0, 1.20, 0.0, 0.40]** | |
 
 **Key Observation**: Despite the constantly changing raw pre-activations, the normalized outputs maintain a consistent distribution pattern:
 - **All steps**: Normalized values consistently follow standard normal distribution (mean ≈ 0, std ≈ 1)
