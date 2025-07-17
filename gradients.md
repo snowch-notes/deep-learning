@@ -69,10 +69,10 @@ In short, the gradient's ability to create a single, comprehensive direction vec
 
 To prove that the gradient points in the direction of greatest change, we use the formula for the **directional derivative**. This formula tells us the slope of the function in any arbitrary direction we choose.
 
-The formula is: `$D_{u}f(x) = ||u||||\nabla f(x)||cos(\theta)$`
+The formula is: $D_{u}f(x) = ||u||||\nabla f(x)||cos(\theta)$
 
 Let's break down each component:
-* `$D_{u}f(x)$`: This is the directional derivative. It represents the slope of the function `f` at the point `x` if we move in the specific direction `u`.
+* $D_{u}f(x)$: This is the directional derivative. It represents the slope of the function `f` at the point `x` if we move in the specific direction `u`.
 * `u`: This is a **unit vector**, meaning a vector with a length of exactly 1. We use a unit vector because we only care about the *direction* it defines, not its length.
 * `||u||`: The double bars `|| ||` signify the **magnitude** or **length** of the vector inside. Since `u` is a unit vector by definition, its length is always 1, so `||u|| = 1`.
 * `∇f(x)`: This is the gradient vector of our function `f` evaluated at the specific point `x`.
@@ -80,9 +80,9 @@ Let's break down each component:
 * `θ`: This is the angle between our chosen direction vector `u` and the gradient vector `∇f(x)`.
 * `cos(θ)`: This term measures the alignment between our chosen direction and the gradient's direction. Its value ranges from 1 (perfectly aligned) to -1 (perfectly opposite).
 
-With these definitions, the formula simplifies to `$D_{u}f(x) = 1 \cdot ||\nabla f(x)|| \cdot cos(\theta)$`, or just `$D_{u}f(x) = ||\nabla f(x)||cos(\theta)$`.
+With these definitions, the formula simplifies to $D_{u}f(x) = 1 \cdot ||\nabla f(x)|| \cdot cos(\theta)$, or just $D_{u}f(x) = ||\nabla f(x)||cos(\theta)$.
 
-At any given point `x`, the steepness in the gradient's direction, `||∇f(x)||`, is a fixed value. Therefore, to maximize our slope, `$D_{u}f(x)$`, we must maximize the only part that can change: `cos(θ)`. The maximum value of `cos(θ)` is 1, and this only occurs when the angle `θ` is 0. An angle of 0 means our chosen direction `u` is pointing in the exact same direction as the gradient, `∇f(x)`. This proves that the direction of maximum change is the direction of the gradient.
+At any given point `x`, the steepness in the gradient's direction, `||∇f(x)||`, is a fixed value. Therefore, to maximize our slope, $D_{u}f(x)$, we must maximize the only part that can change: `cos(θ)`. The maximum value of `cos(θ)` is 1, and this only occurs when the angle `θ` is 0. An angle of 0 means our chosen direction `u` is pointing in the exact same direction as the gradient, `∇f(x)`. This proves that the direction of maximum change is the direction of the gradient.
 
 ---
 
