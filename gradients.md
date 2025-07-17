@@ -95,3 +95,25 @@ This is where our new vector field becomes essential for **gradient descent**:
 > If the gradient vector field (`∇f`) points towards the steepest **increase**, then the *negative* of that vector field (`-∇f`) must point towards the steepest **decrease**.
 
 The gradient descent algorithm uses this opposing vector field as a guide. At any point, it calculates the gradient vector and then takes a small step in the opposite direction, iteratively walking downhill to find a minimum of the function.
+
+---
+
+## From Analogy to Application: The Network's Loss Function
+
+It's important to clarify how the simple `f(x, y, z) = x² + y² + z²` analogy translates to a real neural network. A key question arises: if each dimension is a parameter like a weight, does that parameter have its own simple function?
+
+The answer is **no**. The loss function of a neural network is a single, highly complex function where all parameters are deeply interconnected. Changing even one weight early in the network will ripple through all subsequent calculations and alter the final loss value.
+
+### One Function, Many Slopes
+
+So, how can we calculate a slope for each parameter if there isn't a separate function for each one? We do this by calculating the slope of the **one, single loss function** with respect to each parameter individually.
+
+The mathematical tool for this is the **partial derivative**. A partial derivative answers the question: "If I change *only this one parameter* by a tiny amount, while holding all other millions of parameters constant, how does the final loss value change?"
+
+### The Chain Rule: Linking Contribution to Slope
+
+In practice, a neural network calculates these millions of partial derivatives efficiently using an algorithm called **backpropagation**, which relies on the **chain rule** from calculus.
+
+Think of it like a complex assembly line. Backpropagation starts at the final error and works backward. It calculates how much the last stage contributed to the error, then how the stage before that contributed to the *last stage's* error, and so on. By chaining all these contributions together, it determines the total contribution of every single parameter to the final error.
+
+This "total contribution" is, by mathematical definition, the slope (the partial derivative) of the loss function with respect to that specific parameter.
